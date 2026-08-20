@@ -4,23 +4,46 @@ const IMAGE_MODEL_DEFAULT = 'gemini-3.1-flash-lite-image';
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const externalAiEnabled = isExternalAiEnabled(env);
+
     if (url.pathname === '/api/health') {
       return json({
         ok: true,
-        aiConfigured: Boolean(env.GEMINI_API_KEY),
-        pinRequired: Boolean(env.AI_ACCESS_PIN),
-        textModel: env.GEMINI_TEXT_MODEL || TEXT_MODEL_DEFAULT,
-        imageModel: env.GEMINI_IMAGE_MODEL || IMAGE_MODEL_DEFAULT
+        mode: externalAiEnabled ? 'gemini' : 'free',
+        externalAiEnabled,
+        billingSafe: !externalAiEnabled,
+        aiConfigured: externalAiEnabled,
+        pinRequired: externalAiEnabled && Boolean(env.AI_ACCESS_PIN)
       });
     }
-    if (url.pathname === '/api/story-help' && request.method === 'POST') return storyHelp(request, env);
-    if (url.pathname === '/api/image-finish' && request.method === 'POST') return imageFinish(request, env);
+
+    if (url.pathname === '/api/story-help' && request.method === 'POST') {
+      if (!externalAiEnabled) return freeModeResponse();
+      return storyHelp(request, env);
+    }
+
+    if (url.pathname === '/api/image-finish' && request.method === 'POST') {
+      if (!externalAiEnabled) return freeModeResponse();
+      return imageFinish(request, env);
+    }
+
     return env.ASSETS.fetch(request);
   }
 };
 
+function isExternalAiEnabled(env) {
+  return env.AI_MODE === 'gemini' && Boolean(env.GEMINI_API_KEY);
+}
+
+function freeModeResponse() {
+  return json({
+    error: 'External AI is disabled in FREE MODE',
+    code: 'FREE_MODE',
+    billingSafe: true
+  }, 403);
+}
+
 async function storyHelp(request, env) {
-  if (!env.GEMINI_API_KEY) return json({ error: 'GEMINI_API_KEY is not configured' }, 503);
   const authError = aiAuth(request, env);
   if (authError) return authError;
 
@@ -51,7 +74,6 @@ async function storyHelp(request, env) {
 }
 
 async function imageFinish(request, env) {
-  if (!env.GEMINI_API_KEY) return json({ error: 'GEMINI_API_KEY is not configured' }, 503);
   const authError = aiAuth(request, env);
   if (authError) return authError;
 
@@ -70,19 +92,18 @@ async function imageFinish(request, env) {
     generationConfig: { responseModalities: ['Image'] }
   };
 
-  const r = await fetch(api, {
+  const response = await fetch(api, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
     body: JSON.stringify(payload)
   });
-  const data = await r.json();
-  if (!r.ok) return json({ error: extractApiError(data) }, r.status);
+  const data = await response.json();
+  if (!response.ok) return json({ error: extractApiError(data) }, response.status);
 
   const parts = data?.candidates?.[0]?.content?.parts || [];
   const imagePart = parts.find(p => p.inlineData?.data || p.inline_data?.data);
   const inline = imagePart?.inlineData || imagePart?.inline_data;
   if (!inline?.data) return json({ error: 'Gemini returned no image' }, 502);
-
   return json({ imageDataUrl: `data:${inline.mimeType || inline.mime_type || 'image/png'};base64,${inline.data}` });
 }
 
@@ -92,24 +113,18 @@ async function geminiText(env, prompt, schema) {
   const payload = {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: {
-      responseFormat: {
-        text: {
-          mimeType: 'application/json',
-          schema
-        }
-      },
+      responseFormat: { text: { mimeType: 'application/json', schema } },
       temperature: 0.8
     }
   };
 
-  const r = await fetch(api, {
+  const response = await fetch(api, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': env.GEMINI_API_KEY },
     body: JSON.stringify(payload)
   });
-  const data = await r.json();
-  if (!r.ok) throw new Error(extractApiError(data));
-
+  const data = await response.json();
+  if (!response.ok) throw new Error(extractApiError(data));
   const text = data?.candidates?.[0]?.content?.parts?.map(p => p.text || '').join('') || '';
   try { return JSON.parse(text); } catch { throw new Error('AI response was not valid JSON'); }
 }
@@ -123,23 +138,16 @@ function aiAuth(request, env) {
 function itemsSchema(count) {
   return {
     type: 'object',
-    properties: {
-      items: {
-        type: 'array',
-        minItems: count,
-        maxItems: count,
-        items: { type: 'string' }
-      }
-    },
+    properties: { items: { type: 'array', minItems: count, maxItems: count, items: { type: 'string' } } },
     required: ['items']
   };
 }
 
-function parseDataUrl(v) {
-  const m = String(v || '').match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/s);
-  return m ? { mime: m[1], data: m[2] } : null;
+function parseDataUrl(value) {
+  const match = String(value || '').match(/^data:(image\/[a-zA-Z0-9.+-]+);base64,(.+)$/s);
+  return match ? { mime: match[1], data: match[2] } : null;
 }
-function safe(v) { return String(v ?? '').slice(0, 4000); }
+function safe(value) { return String(value ?? '').slice(0, 4000); }
 function extractApiError(data) { return data?.error?.message || data?.message || 'Gemini API request failed'; }
 function json(data, status = 200) {
   return new Response(JSON.stringify(data), {
