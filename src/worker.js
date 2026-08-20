@@ -1,4 +1,4 @@
-const TEXT_MODEL_DEFAULT = 'gemini-3.6-flash';
+const TEXT_MODEL_DEFAULT = 'gemini-3.7-flash';
 const IMAGE_MODEL_DEFAULT = 'gemini-3.1-flash-image';
 
 export default {
