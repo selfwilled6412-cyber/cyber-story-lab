@@ -1,40 +1,54 @@
-# CYBER STORY LAB v0.5
+# CYBER STORY LAB v0.6 FREE MODE
 
-利用者本人が作者になる4コマ漫画制作Webアプリ。AIは「困った時の質問」「文章→作画指示」「本人原画の任意仕上げ」だけを担当し、物語を勝手に完成・修正しません。
+利用者本人が作者になる4コマ漫画制作Webアプリです。
+
+現在の本番版は **完全無料運用** を優先し、外部AIをOFFにしています。物語・画像をGemini等へ送信しません。お題候補、質問ヒント、作画ヒント、画像の見やすさ調整はブラウザ内の無料ロジックで行います。
+
+## 制作の考え方
+- 作者は利用者本人
+- システムは答えや完成ストーリーを作らない
+- 変な展開、不思議な言葉、独特な絵を普通に直さない
+- 1コマ = A4コピー用紙1枚
+- 原画4枚を撮影して4コマに自動配置
 
 ## 今できること
-- お題 → 主役 → 4コマを1問ずつ制作
-- ヒントは段階式。AI未接続でもローカル補助で動作
-- A4 1枚 = 1コマの作画指示
-- 原画4枚の撮影/アップロード、ブラウザ内軽量化、簡易線補正
-- 2×2 / 縦4コマの完成レイアウト
-- IndexedDBの「作品棚」へ複数作品を保存・再開・削除
-- 5作品で「第1巻」へ進む進捗表示
-- A4比率のPNG保存
-- Cloudflare Worker + Gemini API接続用バックエンド実装済み
+- お題を自分で入力 / 困った時だけ候補を5個表示
+- 主役を自由に決める。人間・動物・物・正体不明でもOK
+- 4コマを1問ずつ制作
+- 各コマで「答え」ではなく質問ヒントを表示
+- A4 4枚分の作画ヒントを自動整理
+- 原画4枚を撮影 / アップロード
+- 画像処理は端末内のみ
+  - 原画そのまま
+  - 線を見やすく
+  - 白黒くっきり
+- 文章入り4コマを自動レイアウト
+- 2×2 / 縦4コマ
+- PNG保存
+- IndexedDB作品棚
+- 作者ごとに5作品で「第1巻」進捗
 
-## AI設計
-- Text: `gemini-3.1-flash-lite`（短いヒント・作画指示。低コスト/無料枠を優先）
-- Image: `gemini-3.1-flash-lite-image`（原画を尊重した任意仕上げ。低コスト優先）
-- APIキーはフロントへ置かず Cloudflare Worker secret `GEMINI_API_KEY` に保存
-- AI画像仕上げは利用者/スタッフが明示的に押したコマだけ実行
-- Geminiへ作者名や支援区分は送信しない。文章補助ではお題・主役・4コマ文章のみ、画像補助では対象原画とそのコマに必要な情報だけを送信
+## 料金安全設計
+本番設定 `AI_MODE` は `free` です。
 
-## 公開時のAI保護
-`AI_ACCESS_PIN` をCloudflare Secretとして設定すると、課金が発生するAI APIだけスタッフPINで保護できます。通常の4コマ制作画面、文章入力、原画アップロード、作品棚はそのまま利用でき、AI補助を押した時だけPINが必要になります。
+この状態では、仮に `GEMINI_API_KEY` が環境に存在しても `/api/story-help` と `/api/image-finish` は外部AIを呼び出さず、FREE_MODEとして停止します。Workerテストでも「外部fetchが呼ばれない」ことを確認します。
 
-## ローカルでUIだけ確認
-`public/index.html` をブラウザで開く。AIは OFFLINE DEMO 表示になるが、制作フローは使えます。
+```json
+"AI_MODE": "free"
+```
 
-## CloudflareでAI込み確認
-1. `npm install`
-2. `.dev.vars.example` を `.dev.vars` にコピーし、`GEMINI_API_KEY` と `AI_ACCESS_PIN` を設定
-3. `npm run dev`
-4. 表示された localhost URL を開く
+外部AIを将来使う場合だけ、サイ校側の契約・請求先を準備した後に `AI_MODE=gemini` とSecretを設定します。個人アカウントのAPIキーを本番運用へ入れない方針です。
 
-## テスト
-- `npm run check`
-- `npm test`
+## ローカル確認
+`public/index.html` をブラウザで開くと、無料版の制作フローを確認できます。
+
+## 開発
+```bash
+npm install
+npm run check
+npm test
+npm run dev
+```
 
 ## 本番
-Cloudflare Worker Secretsへ `GEMINI_API_KEY` と `AI_ACCESS_PIN` を登録してから `npm run deploy`。
+Cloudflare Workers Builds がGitHub `main` を自動デプロイします。
