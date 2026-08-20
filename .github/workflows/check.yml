@@ -21,4 +21,4 @@ jobs:
       - name: Syntax check
         run: npm run check
       - name: Worker tests
-        run: node tests/worker.test.mjs
+        run: npm test
