@@ -3,6 +3,12 @@
   titles[5] = ['A4用紙に絵を描こう', '決めた文章を「何を描けばいいか」に整理するところだけシステムが手伝います。'];
   titles[6] = ['原画を取り込もう', '4枚を写真で登録。画像調整はこの端末の中だけで行います。'];
 
+  setApiStatus = function () {
+    state.apiReady = false;
+    els.apiBadge.textContent = 'FREE MODE • AI課金なし';
+    els.apiBadge.classList.add('online');
+  };
+
   renderStep4 = function () {
     els.stepContent.appendChild(cloneTemplate('#step4Template'));
     const grid = q('#reviewGrid');
@@ -20,5 +26,6 @@
     });
   };
 
+  setApiStatus();
   render();
 })();
