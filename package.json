@@ -1,12 +1,12 @@
 {
   "name": "cyber-story-lab",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "check": "node --check public/app.js && node --check src/worker.js",
+    "check": "node --check public/app.js && node --check public/security.js && node --check src/worker.js",
     "test": "node tests/worker.test.mjs"
   },
   "devDependencies": {
