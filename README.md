@@ -14,7 +14,7 @@ B型利用者本人が作者になる4コマ漫画制作Webアプリ。AIは「�
 - Cloudflare Worker + Gemini API接続用バックエンド実装済み
 
 ## AI設計
-- Text: `gemini-3.6-flash`（ヒント・作画指示）
+- Text: `gemini-3.7-flash`（ヒント・作画指示）
 - Image: `gemini-3.1-flash-image`（原画を尊重した任意仕上げ）
 - APIキーはフロントへ置かず Cloudflare Worker secret `GEMINI_API_KEY` に保存
 
