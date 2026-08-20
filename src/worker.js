@@ -1,5 +1,5 @@
-const TEXT_MODEL_DEFAULT = 'gemini-3.7-flash';
-const IMAGE_MODEL_DEFAULT = 'gemini-3.1-flash-image';
+const TEXT_MODEL_DEFAULT = 'gemini-3.1-flash-lite';
+const IMAGE_MODEL_DEFAULT = 'gemini-3.1-flash-lite-image';
 
 export default {
   async fetch(request, env) {
