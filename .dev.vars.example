@@ -1,2 +1,3 @@
-# Copy to .dev.vars for local API testing. Never commit the real key.
+# Copy to .dev.vars for local API testing. Never commit the real values.
 GEMINI_API_KEY="paste_key_here"
+AI_ACCESS_PIN="choose_staff_pin"
