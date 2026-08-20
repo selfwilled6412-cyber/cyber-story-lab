@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#07111f" />
   <meta name="color-scheme" content="dark" />
-  <title>CYBER STORY LAB｜AI 4コマ工房</title>
+  <title>CYBER STORY LAB｜4コマ創作工房</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="bg-grid"></div><div class="bg-glow bg-glow-a"></div><div class="bg-glow bg-glow-b"></div><div class="particles" aria-hidden="true"></div>
   <header class="topbar glass">
-    <div><div class="eyebrow">SAIKO CREATIVE SYSTEM // 4-KOMA MODE</div><h1>CYBER STORY LAB</h1></div>
-    <div class="top-actions"><span class="api-badge" id="apiBadge">OFFLINE DEMO</span><button class="ghost-btn" id="libraryBtn">作品棚</button><button class="ghost-btn" id="saveBtn">途中保存</button><button class="ghost-btn danger" id="resetBtn">最初から</button></div>
+    <div><div class="eyebrow">SAIKO CREATIVE SYSTEM // FREE 4-KOMA MODE</div><h1>CYBER STORY LAB</h1></div>
+    <div class="top-actions"><span class="api-badge online" id="apiBadge">FREE MODE • 0円</span><button class="ghost-btn" id="libraryBtn">作品棚</button><button class="ghost-btn" id="saveBtn">途中保存</button><button class="ghost-btn danger" id="resetBtn">最初から</button></div>
   </header>
   <main class="shell">
     <aside class="progress-panel glass">
@@ -21,10 +21,10 @@
         <li data-step="1"><span>01</span> お題</li><li data-step="2"><span>02</span> 主役</li><li data-step="3"><span>03</span> 4コマの話</li><li data-step="4"><span>04</span> 文章確認</li><li data-step="5"><span>05</span> 絵を描く</li><li data-step="6"><span>06</span> 原画取込</li><li data-step="7"><span>07</span> 完成</li>
       </ol>
       <div class="creator-card"><label for="creatorName">作者名（ニックネームOK）</label><input id="creatorName" autocomplete="off" placeholder="例：ミナコ" /></div>
-      <div class="authorship-meter"><div class="meter-label"><span>作者</span><strong>あなた</strong></div><div class="meter-track"><i></i></div><small>AIは「考える代わり」ではなく、困った時と仕上げだけ。</small></div>
+      <div class="authorship-meter"><div class="meter-label"><span>作者</span><strong>あなた</strong></div><div class="meter-track"><i></i></div><small>サポートは「考える代わり」ではなく、困った時と仕上げだけ。</small></div>
     </aside>
     <section class="stage glass" id="stage">
-      <div class="system-rail"><span class="rail-live"><i></i> CREATOR MODE</span><span>発想：利用者 100%</span><span>AI：必要時だけ</span><span>作画：A4 × 4枚</span></div>
+      <div class="system-rail"><span class="rail-live"><i></i> CREATOR MODE</span><span>発想：利用者 100%</span><span>サポート：必要時だけ</span><span>作画：A4 × 4枚</span><span>外部AI：OFF</span></div>
       <div class="stage-head"><div><div class="step-chip" id="stepChip">STEP 01</div><h2 id="stepTitle"></h2><p id="stepLead"></p></div><div class="pulse-orb" aria-hidden="true"><span></span></div></div>
       <div id="stepContent"></div>
       <div class="nav-row"><button class="ghost-btn" id="backBtn">← もどる</button><button class="primary-btn" id="nextBtn">つぎへ →</button></div>
@@ -33,20 +33,20 @@
 
   <template id="step1Template"><div class="question-card"><div class="question-no">Q1 // THEME</div><h3>どんなお話にする？</h3><p>まずは自由に入力。変でも、意味不明でも、それが作品の個性です。</p><textarea id="themeInput" rows="4" placeholder="例：月でラーメンを作る / 空を泳ぐ魚 / しゃべる靴"></textarea><div class="helper-row"><button class="assist-btn" id="themeHintBtn">✦ 困ったのでヒントを見る</button><button class="tiny-btn" id="themeClearBtn">消す</button></div><div class="hint-ladder hidden" id="themeHintLadder"><div class="hint-level"><b>HINT 01</b><span>「場所」「食べ物」「生き物」「物」「宇宙」のどれか1つだけ選んでみよう。</span></div><button class="assist-btn sub" id="themeExamplesBtn">まだ難しい → 候補を5個だけ見る</button></div><div class="choice-grid" id="themeHints"></div></div></template>
 
-  <template id="step2Template"><div class="question-card"><div class="question-no">Q2 // MAIN CHARACTER</div><h3>主役はだれ？ なに？</h3><p>人間じゃなくてOK。動物、食べ物、道具、雲、機械、正体不明のものでもOK。</p><textarea id="heroInput" rows="4" placeholder="例：目が3つある紫色の丸 / しゃべる冷蔵庫 / 名前のない風"></textarea><div class="helper-row"><button class="assist-btn" id="heroHintBtn">✦ 考えるヒント</button></div><div class="hint-ladder hidden" id="heroHintLadder"><div class="hint-level"><b>HINT 01</b><span>まず種類だけ決めよう。「生き物 / 食べ物 / 物 / 自然 / 機械 / 正体不明」</span></div><div class="hint-level"><b>HINT 02</b><span>次に特徴を1個だけ足そう。「色 / 大きさ / 形 / 性格 / 変なところ」</span></div></div></div></template>
+  <template id="step2Template"><div class="question-card"><div class="question-no">Q2 // MAIN CHARACTER</div><h3>主役はだれ？ なに？</h3><p>人間じゃなくてOK。動物、食べ物、道具、雲、機械、正体不明のものでもOK。</p><textarea id="heroInput" rows="4" placeholder="例：目が3つある紫色の丸 / しゃべる冷蔵庫 / 名前のない風"></textarea><div class="helper-row"><button class="assist-btn" id="heroHintBtn">✦ 考えるヒント</button></div><div class="hint-ladder hidden" id="heroHintLadder"><div class="hint-level"><b>HINT 01</b><span>まず種類だけ決めよう。「生き物 / 食べ物 / 物 / 自然 / 機械 / 正体不明」</span></div><div class="hint-level"><b>HINT 02</b><span>次に特徴を1個だけ足そう。「色 / 大きさ / 形 / 性格 / 変なところ」</span></div><button class="assist-btn sub" id="heroExamplesBtn">まだ難しい → 主役の入口を5個見る</button></div><div class="choice-grid" id="heroHints"></div></div></template>
 
-  <template id="step3Template"><div class="story-builder"><div class="story-tabs" id="storyTabs"></div><div class="question-card" id="storyQuestionCard"><div class="question-no" id="storyQuestionNo"></div><h3 id="storyQuestionTitle"></h3><p id="storyQuestionHelp"></p><div class="context-strip" id="storyContext"></div><textarea id="storyAnswer" rows="5" placeholder="あなたの言葉で入力してください"></textarea><div class="helper-row"><button class="assist-btn" id="storyHintBtn">✦ 困ったのでヒント</button><button class="primary-btn compact" id="storyNextBtn">この答えで次のコマへ →</button></div><div class="hint-box hidden" id="storyHintBox"></div></div></div></template>
+  <template id="step3Template"><div class="story-builder"><div class="story-tabs" id="storyTabs"></div><div class="question-card" id="storyQuestionCard"><div class="question-no" id="storyQuestionNo"></div><h3 id="storyQuestionTitle"></h3><p id="storyQuestionHelp"></p><div class="context-strip" id="storyContext"></div><textarea id="storyAnswer" rows="5" placeholder="あなたの言葉で入力してください"></textarea><div class="helper-row"><button class="assist-btn" id="storyHintBtn">✦ 困ったので質問ヒント</button><button class="primary-btn compact" id="storyNextBtn">この答えで次のコマへ →</button></div><div class="hint-box hidden" id="storyHintBox"></div></div></div></template>
 
-  <template id="step4Template"><div class="review-wrap"><div class="review-banner"><strong>作者保護モード：</strong>あなたの変な展開・不思議な言葉も、そのまま残します。AIが勝手に「普通の話」に直しません。</div><div class="four-grid" id="reviewGrid"></div></div></template>
+  <template id="step4Template"><div class="review-wrap"><div class="review-banner"><strong>作者保護モード：</strong>あなたの変な展開・不思議な言葉も、そのまま残します。文章は勝手に「普通の話」に書き換えません。</div><div class="four-grid" id="reviewGrid"></div></div></template>
 
-  <template id="step5Template"><div class="draw-intro"><div class="review-banner">A4コピー用紙を4枚用意。<strong>1コマ＝A4 1枚</strong>。上手に描く必要はありません。棒人間・記号・ラフでもOK。</div><div class="draw-toolbar"><button class="assist-btn" id="refreshDrawGuideBtn">✦ 作画指示をわかりやすくする</button><span id="drawGuideStatus">文章を絵に変換する指示だけAIが補助できます。</span></div><div class="draw-grid" id="drawGrid"></div></div></template>
+  <template id="step5Template"><div class="draw-intro"><div class="review-banner">A4コピー用紙を4枚用意。<strong>1コマ＝A4 1枚</strong>。上手に描く必要はありません。棒人間・記号・ラフでもOK。</div><div class="draw-toolbar"><button class="assist-btn" id="refreshDrawGuideBtn">✦ 作画ヒントを別の言い方にする</button><span id="drawGuideStatus">文章を増やさず、描くポイントだけ整理します。</span></div><div class="draw-grid" id="drawGrid"></div></div></template>
 
-  <template id="step6Template"><div><div class="review-banner">A4原画を1枚ずつ撮影。画像はブラウザ内で軽量化して保存します。AI仕上げは<strong>明示的に押したコマだけ</strong>実行します。</div><div class="mode-switch"><button data-mode="original" class="mode active">原画そのまま</button><button data-mode="clean" class="mode">線を見やすく</button></div><div class="upload-grid" id="uploadGrid"></div></div></template>
+  <template id="step6Template"><div><div class="review-banner">A4原画を1枚ずつ撮影。画像の軽量化・見やすさ調整は<strong>この端末の中だけ</strong>で処理します。外部AIへの画像送信はありません。</div><div class="mode-switch"><button data-mode="original" class="mode active">原画そのまま</button><button data-mode="clean" class="mode">線を見やすく</button><button data-mode="mono" class="mode">白黒くっきり</button></div><div class="upload-grid" id="uploadGrid"></div></div></template>
 
   <template id="step7Template"><div class="finish-wrap"><div class="finish-title"><span>MISSION COMPLETE</span><h3 id="finishHeading"></h3></div><div class="layout-switch"><span>完成レイアウト</span><button class="mode" data-layout="grid">2×2（おすすめ）</button><button class="mode" data-layout="vertical">縦4コマ</button></div><div class="comic-sheet" id="comicSheet"></div><div class="finish-actions"><button class="primary-btn" id="saveWorkBtn">作品棚に保存</button><button class="primary-btn" id="downloadPngBtn">完成画像をPNG保存</button><button class="ghost-btn" id="newStoryBtn">新しい4コマを作る</button></div></div></template>
 
-  <div class="modal hidden" id="libraryModal"><div class="library-panel glass"><div class="library-head"><div><span>CREATOR ARCHIVE</span><h3>作品棚</h3></div><button class="ghost-btn" id="closeLibraryBtn">閉じる</button></div><div class="volume-progress"><div><strong id="volumeCount">0 / 5</strong><span>第1巻まで</span></div><div class="volume-track"><i id="volumeBar"></i></div><small>4コマが5本たまったら「第1巻」にまとめる工程へ進めます。</small></div><div class="library-grid" id="libraryGrid"></div></div></div>
-  <div class="modal hidden" id="busyModal" role="status" aria-live="polite"><div class="modal-card glass"><div class="loader-orb"></div><strong id="busyTitle">AIが補助中...</strong><p id="busyText">あなたの発想は変更しません。</p></div></div>
-  <script src="./security.js"></script>
+  <div class="modal hidden" id="libraryModal"><div class="library-panel glass"><div class="library-head"><div><span>CREATOR ARCHIVE</span><h3>作品棚</h3></div><button class="ghost-btn" id="closeLibraryBtn">閉じる</button></div><div class="volume-progress"><div><strong id="volumeCount">0 / 5</strong><span>第1巻まで</span></div><div class="volume-track"><i id="volumeBar"></i></div><small id="volumeNote">作者名を入れると、その作者ごとの第1巻進捗を表示します。</small></div><div class="library-grid" id="libraryGrid"></div></div></div>
+  <div class="modal hidden" id="busyModal" role="status" aria-live="polite"><div class="modal-card glass"><div class="loader-orb"></div><strong id="busyTitle">処理中...</strong><p id="busyText">作品の内容は変更しません。</p></div></div>
   <script src="./app.js"></script>
-</body></html>
+</body>
+</html>
