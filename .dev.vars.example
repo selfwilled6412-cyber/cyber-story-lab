@@ -1,3 +1,7 @@
-# Copy to .dev.vars for local API testing. Never commit the real values.
-GEMINI_API_KEY="paste_key_here"
-AI_ACCESS_PIN="choose_staff_pin"
+# FREE MODE is the default and requires no API key.
+AI_MODE="free"
+
+# Future only: when the organization explicitly enables paid external AI,
+# switch AI_MODE to gemini and set secrets locally or in Cloudflare.
+# GEMINI_API_KEY=""
+# AI_ACCESS_PIN=""
