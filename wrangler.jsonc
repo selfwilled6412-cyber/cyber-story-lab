@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "cyber-story-lab",
+  "main": "./src/worker.js",
+  "compatibility_date": "2026-08-20",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "GEMINI_TEXT_MODEL": "gemini-3.6-flash",
+    "GEMINI_IMAGE_MODEL": "gemini-3.1-flash-image"
+  }
+}
