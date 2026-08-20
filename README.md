@@ -1,4 +1,4 @@
-# CYBER STORY LAB v0.4
+# CYBER STORY LAB v0.5
 
 B型利用者本人が作者になる4コマ漫画制作Webアプリ。AIは「困った時の質問」「文章→作画指示」「本人原画の任意仕上げ」だけを担当し、物語を勝手に完成・修正しません。
 
@@ -19,14 +19,21 @@ B型利用者本人が作者になる4コマ漫画制作Webアプリ。AIは「�
 - APIキーはフロントへ置かず Cloudflare Worker secret `GEMINI_API_KEY` に保存
 - AI画像仕上げは利用者/スタッフが明示的に押したコマだけ実行
 
+## 公開時のAI保護
+`AI_ACCESS_PIN` をCloudflare Secretとして設定すると、課金が発生するAI APIだけスタッフPINで保護できます。通常の4コマ制作画面、文章入力、原画アップロード、作品棚はそのまま利用でき、AI補助を押した時だけPINが必要になります。
+
 ## ローカルでUIだけ確認
-`public/index.html` をブラウザで開く。AIは OFFLINE DEMO 表示になるが、制作フローは使える。
+`public/index.html` をブラウザで開く。AIは OFFLINE DEMO 表示になるが、制作フローは使えます。
 
 ## CloudflareでAI込み確認
 1. `npm install`
-2. `.dev.vars.example` を `.dev.vars` にコピーしてキーを設定
+2. `.dev.vars.example` を `.dev.vars` にコピーし、`GEMINI_API_KEY` と `AI_ACCESS_PIN` を設定
 3. `npm run dev`
 4. 表示された localhost URL を開く
 
+## テスト
+- `npm run check`
+- `npm test`
+
 ## 本番
-`npx wrangler secret put GEMINI_API_KEY` でSecretを登録後、`npm run deploy`。
+Cloudflare Worker Secretsへ `GEMINI_API_KEY` と `AI_ACCESS_PIN` を登録してから `npm run deploy`。
