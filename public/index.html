@@ -12,7 +12,7 @@
   <div class="bg-grid"></div><div class="bg-glow bg-glow-a"></div><div class="bg-glow bg-glow-b"></div><div class="particles" aria-hidden="true"></div>
   <header class="topbar glass">
     <div><div class="eyebrow">SAIKO CREATIVE SYSTEM // FREE 4-KOMA MODE</div><h1>CYBER STORY LAB</h1></div>
-    <div class="top-actions"><span class="api-badge online" id="apiBadge">FREE MODE • 0円</span><button class="ghost-btn" id="libraryBtn">作品棚</button><button class="ghost-btn" id="saveBtn">途中保存</button><button class="ghost-btn danger" id="resetBtn">最初から</button></div>
+    <div class="top-actions"><span class="api-badge online" id="apiBadge">FREE MODE • AI課金なし</span><button class="ghost-btn" id="libraryBtn">作品棚</button><button class="ghost-btn" id="saveBtn">途中保存</button><button class="ghost-btn danger" id="resetBtn">最初から</button></div>
   </header>
   <main class="shell">
     <aside class="progress-panel glass">
@@ -41,7 +41,7 @@
 
   <template id="step5Template"><div class="draw-intro"><div class="review-banner">A4コピー用紙を4枚用意。<strong>1コマ＝A4 1枚</strong>。上手に描く必要はありません。棒人間・記号・ラフでもOK。</div><div class="draw-toolbar"><button class="assist-btn" id="refreshDrawGuideBtn">✦ 作画ヒントを別の言い方にする</button><span id="drawGuideStatus">文章を増やさず、描くポイントだけ整理します。</span></div><div class="draw-grid" id="drawGrid"></div></div></template>
 
-  <template id="step6Template"><div><div class="review-banner">A4原画を1枚ずつ撮影。画像の軽量化・見やすさ調整は<strong>この端末の中だけ</strong>で処理します。外部AIへの画像送信はありません。</div><div class="mode-switch"><button data-mode="original" class="mode active">原画そのまま</button><button data-mode="clean" class="mode">線を見やすく</button><button data-mode="mono" class="mode">白黒くっきり</button></div><div class="upload-grid" id="uploadGrid"></div></div></template>
+  <template id="step6Template"><div><div class="review-banner">A4原画を1枚ずつ撮影。画像の軽量化・見やすさ調整は<strong>この端末の中だけ</strong>で処理します。外部AIへの画像送信はありません。途中保存した原画もこの端末内に保持します。</div><div class="mode-switch"><button data-mode="original" class="mode active">原画そのまま</button><button data-mode="clean" class="mode">線を見やすく</button><button data-mode="mono" class="mode">白黒くっきり</button></div><div class="upload-grid" id="uploadGrid"></div></div></template>
 
   <template id="step7Template"><div class="finish-wrap"><div class="finish-title"><span>MISSION COMPLETE</span><h3 id="finishHeading"></h3></div><div class="layout-switch"><span>完成レイアウト</span><button class="mode" data-layout="grid">2×2（おすすめ）</button><button class="mode" data-layout="vertical">縦4コマ</button></div><div class="comic-sheet" id="comicSheet"></div><div class="finish-actions"><button class="primary-btn" id="saveWorkBtn">作品棚に保存</button><button class="primary-btn" id="downloadPngBtn">完成画像をPNG保存</button><button class="ghost-btn" id="newStoryBtn">新しい4コマを作る</button></div></div></template>
 
@@ -50,5 +50,6 @@
   <script src="./app.js"></script>
   <script src="./free-mode.js"></script>
   <script src="./free-copy.js"></script>
+  <script src="./robustness-v07.js"></script>
 </body>
 </html>
