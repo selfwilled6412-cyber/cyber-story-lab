@@ -1,5 +1,7 @@
 (() => {
   const BACKUP_FORMAT = 'cyber-story-lab-backup-v1';
+  const MAX_IMPORT_WORKS = 200;
+  const MAX_IMAGE_CHARS = 12000000;
 
   function backupFileName() {
     const stamp = new Date().toISOString().slice(0, 10).replaceAll('-', '');
@@ -8,6 +10,13 @@
 
   function validWork(work) {
     return work && typeof work === 'object' && typeof work.id === 'string' && Array.isArray(work.story);
+  }
+
+  function safeImageValue(value) {
+    if (!value) return null;
+    const text = String(value);
+    if (text.length > MAX_IMAGE_CHARS) return null;
+    return /^data:image\/[a-zA-Z0-9.+-]+;base64,[A-Za-z0-9+/=\s]+$/.test(text) ? text : null;
   }
 
   async function exportAllWorks() {
@@ -57,7 +66,7 @@
       return;
     }
 
-    const works = payload.works.filter(validWork);
+    const works = payload.works.filter(validWork).slice(0, MAX_IMPORT_WORKS);
     if (!works.length) {
       alert('読み込める作品がありませんでした。');
       return;
@@ -72,13 +81,14 @@
         const now = Date.now();
         const normalized = {
           ...work,
+          id: String(work.id).slice(0, 160),
           creator: String(work.creator || '匿名').slice(0, 80),
           theme: String(work.theme || '無題').slice(0, 200),
           hero: String(work.hero || '').slice(0, 500),
           story: Array.isArray(work.story) ? work.story.slice(0, 4).map(v => String(v || '').slice(0, 4000)) : ['', '', '', ''],
           drawGuides: Array.isArray(work.drawGuides) ? work.drawGuides.slice(0, 4).map(v => String(v || '').slice(0, 4000)) : ['', '', '', ''],
-          images: Array.isArray(work.images) ? work.images.slice(0, 4) : [null, null, null, null],
-          processedImages: Array.isArray(work.processedImages) ? work.processedImages.slice(0, 4) : [null, null, null, null],
+          images: Array.isArray(work.images) ? work.images.slice(0, 4).map(safeImageValue) : [null, null, null, null],
+          processedImages: Array.isArray(work.processedImages) ? work.processedImages.slice(0, 4).map(safeImageValue) : [null, null, null, null],
           layout: work.layout === 'vertical' ? 'vertical' : 'grid',
           createdAt: Number(work.createdAt) || now,
           updatedAt: Number(work.updatedAt) || now
