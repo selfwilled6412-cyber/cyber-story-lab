@@ -30,6 +30,22 @@
   render();
 
   window.addEventListener('load', () => {
+    const loadDraftSlotsV10 = () => {
+      if (!document.querySelector('link[data-drafts-v10]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = './drafts-v10.css';
+        link.dataset.draftsV10 = '1';
+        document.head.appendChild(link);
+      }
+      if (!document.querySelector('script[data-drafts-v10]')) {
+        const script = document.createElement('script');
+        script.src = './drafts-v10.js';
+        script.dataset.draftsV10 = '1';
+        document.body.appendChild(script);
+      }
+    };
+
     const loadBackupV09 = () => {
       if (!document.querySelector('link[data-backup-v09]')) {
         const link = document.createElement('link');
@@ -38,10 +54,14 @@
         link.dataset.backupV09 = '1';
         document.head.appendChild(link);
       }
-      if (!document.querySelector('script[data-backup-v09]')) {
+      const existingBackup = document.querySelector('script[data-backup-v09]');
+      if (existingBackup) {
+        loadDraftSlotsV10();
+      } else {
         const script = document.createElement('script');
         script.src = './backup-v09.js';
         script.dataset.backupV09 = '1';
+        script.onload = loadDraftSlotsV10;
         document.body.appendChild(script);
       }
     };
