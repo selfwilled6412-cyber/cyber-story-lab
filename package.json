@@ -1,12 +1,12 @@
 {
   "name": "cyber-story-lab",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "check": "node --check public/app.js && node --check public/free-mode.js && node --check public/free-copy.js && node --check public/robustness-v07.js && node --check src/worker.js",
+    "check": "node --check public/app.js && node --check public/free-mode.js && node --check public/free-copy.js && node --check public/robustness-v07.js && node --check public/ux-v08.js && node --check src/worker.js",
     "test": "node tests/worker.test.mjs && node tests/ui-free.test.mjs"
   },
   "devDependencies": {

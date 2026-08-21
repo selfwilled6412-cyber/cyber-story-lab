@@ -28,4 +28,20 @@
 
   setApiStatus();
   render();
+
+  window.addEventListener('load', () => {
+    if (!document.querySelector('link[data-ux-v08]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = './ux-v08.css';
+      link.dataset.uxV08 = '1';
+      document.head.appendChild(link);
+    }
+    if (!document.querySelector('script[data-ux-v08]')) {
+      const script = document.createElement('script');
+      script.src = './ux-v08.js';
+      script.dataset.uxV08 = '1';
+      document.body.appendChild(script);
+    }
+  });
 })();
