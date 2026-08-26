@@ -8,6 +8,8 @@ const ux = readFileSync(new URL('../public/ux-v08.js', import.meta.url), 'utf8')
 const uxCss = readFileSync(new URL('../public/ux-v08.css', import.meta.url), 'utf8');
 const backup = readFileSync(new URL('../public/backup-v09.js', import.meta.url), 'utf8');
 const drafts = readFileSync(new URL('../public/drafts-v10.js', import.meta.url), 'utf8');
+const digitalBook = readFileSync(new URL('../public/digital-book-v11.js', import.meta.url), 'utf8');
+const digitalBookCss = readFileSync(new URL('../public/digital-book-v11.css', import.meta.url), 'utf8');
 const wrangler = readFileSync(new URL('../wrangler.jsonc', import.meta.url), 'utf8');
 
 assert.match(index, /FREE MODE • AI課金なし/);
@@ -24,6 +26,8 @@ assert.match(freeCopy, /backup-v09\.js/);
 assert.match(freeCopy, /backup-v09\.css/);
 assert.match(freeCopy, /drafts-v10\.js/);
 assert.match(freeCopy, /drafts-v10\.css/);
+assert.match(freeCopy, /digital-book-v11\.js/);
+assert.match(freeCopy, /digital-book-v11\.css/);
 assert.match(ux, /自動保存/);
 assert.match(ux, /4コマを1本作ってみよう/);
 assert.match(ux, /外部AIへの送信なし・AI課金なし/);
@@ -36,5 +40,13 @@ assert.match(drafts, /cyberStoryLabUserDraftSlots/);
 assert.match(drafts, /制作途中から再開/);
 assert.match(drafts, /利用者ごとの途中保存/);
 assert.match(drafts, /再開する/);
+assert.match(digitalBook, /デジタル絵本で読む/);
+assert.match(digitalBook, /第1巻をデジタル絵本で読む/);
+assert.match(digitalBook, /絵本ファイル保存/);
+assert.match(digitalBook, /standaloneHtml/);
+assert.match(digitalBook, /ArrowRight/);
+assert.match(digitalBookCss, /digital-book-modal/);
+assert.match(digitalBookCss, /db-story-page/);
+assert.match(digitalBookCss, /@media\(max-width:760px\)/);
 
-console.log('ui free-mode tests: 26/26 PASS');
+console.log('ui free-mode tests: 36/36 PASS');
