@@ -1,7 +1,7 @@
 (() => {
   titles[1] = ['どんなお話にする？', '最初は自分で。困った時だけ、無料ヒントを少し使います。'];
-  titles[5] = ['A4用紙に絵を描こう', '決めた文章を「何を描けばいいか」に整理するところだけシステムが手伝います。'];
-  titles[6] = ['原画を取り込もう', '4枚を写真で登録。画像調整はこの端末の中だけで行います。'];
+  titles[5] = ['ラフを描こう', '完成絵ではなく、AIへ伝えるための設計図を作ります。丸・線・矢印・メモでOK。'];
+  titles[6] = ['ラフから絵本イラストへ', 'ラフを取り込み、運用側AI接続後は一から絵本イラストへ描き直せます。'];
 
   setApiStatus = function () {
     state.apiReady = false;
@@ -30,6 +30,22 @@
   render();
 
   window.addEventListener('load', () => {
+    const loadAiRedrawV12 = () => {
+      if (!document.querySelector('link[data-ai-redraw-v12]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = './ai-redraw-v12.css';
+        link.dataset.aiRedrawV12 = '1';
+        document.head.appendChild(link);
+      }
+      if (!document.querySelector('script[data-ai-redraw-v12]')) {
+        const script = document.createElement('script');
+        script.src = './ai-redraw-v12.js';
+        script.dataset.aiRedrawV12 = '1';
+        document.body.appendChild(script);
+      }
+    };
+
     const loadDigitalBookV11 = () => {
       if (!document.querySelector('link[data-digital-book-v11]')) {
         const link = document.createElement('link');
@@ -38,10 +54,14 @@
         link.dataset.digitalBookV11 = '1';
         document.head.appendChild(link);
       }
-      if (!document.querySelector('script[data-digital-book-v11]')) {
+      const existing = document.querySelector('script[data-digital-book-v11]');
+      if (existing) {
+        loadAiRedrawV12();
+      } else {
         const script = document.createElement('script');
         script.src = './digital-book-v11.js';
         script.dataset.digitalBookV11 = '1';
+        script.onload = loadAiRedrawV12;
         document.body.appendChild(script);
       }
     };
