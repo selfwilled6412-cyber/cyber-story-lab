@@ -30,6 +30,22 @@
   render();
 
   window.addEventListener('load', () => {
+    const loadDigitalBookV11 = () => {
+      if (!document.querySelector('link[data-digital-book-v11]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = './digital-book-v11.css';
+        link.dataset.digitalBookV11 = '1';
+        document.head.appendChild(link);
+      }
+      if (!document.querySelector('script[data-digital-book-v11]')) {
+        const script = document.createElement('script');
+        script.src = './digital-book-v11.js';
+        script.dataset.digitalBookV11 = '1';
+        document.body.appendChild(script);
+      }
+    };
+
     const loadDraftSlotsV10 = () => {
       if (!document.querySelector('link[data-drafts-v10]')) {
         const link = document.createElement('link');
@@ -38,10 +54,14 @@
         link.dataset.draftsV10 = '1';
         document.head.appendChild(link);
       }
-      if (!document.querySelector('script[data-drafts-v10]')) {
+      const existingDrafts = document.querySelector('script[data-drafts-v10]');
+      if (existingDrafts) {
+        loadDigitalBookV11();
+      } else {
         const script = document.createElement('script');
         script.src = './drafts-v10.js';
         script.dataset.draftsV10 = '1';
+        script.onload = loadDigitalBookV11;
         document.body.appendChild(script);
       }
     };
