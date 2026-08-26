@@ -1,5 +1,5 @@
 (() => {
-  const book = { pages: [], index: 0, title: '', touchX: null };
+  const book = { pages: [], index: 0, title: '', creator: '', touchX: null };
 
   function safeImage(value) {
     return typeof value === 'string' && /^data:image\/(png|jpe?g|webp);base64,/i.test(value) ? value : '';
@@ -17,6 +17,7 @@
           <div><span class="db-kicker">CYBER STORY LAB // DIGITAL BOOK</span><strong id="dbBookTitle">デジタル絵本</strong></div>
           <div class="db-top-actions">
             <span id="dbCounter">1 / 1</span>
+            <button type="button" class="db-icon" id="dbExportBtn">絵本ファイル保存</button>
             <button type="button" class="db-icon" id="dbFullscreenBtn">全画面</button>
             <button type="button" class="db-icon" id="dbCloseBtn">閉じる ×</button>
           </div>
@@ -36,6 +37,7 @@
     modal.querySelector('#dbCloseBtn').onclick = closeBook;
     modal.querySelector('#dbPrevBtn').onclick = () => moveBook(-1);
     modal.querySelector('#dbNextBtn').onclick = () => moveBook(1);
+    modal.querySelector('#dbExportBtn').onclick = exportStandaloneBook;
     modal.querySelector('#dbFullscreenBtn').onclick = async () => {
       const shell = modal.querySelector('.db-shell');
       try {
@@ -103,6 +105,7 @@
   function openSingleBook(work) {
     if (!work) return;
     book.title = work.theme || 'デジタル絵本';
+    book.creator = work.creator || '作者';
     book.pages = [makeCover(work), ...[0,1,2,3].map(i => makeStoryPage(work, i)), makeEnd(work.creator, 1)];
     book.index = 0;
     openBook();
@@ -122,6 +125,7 @@
     });
     pages.push(makeEnd(creator, selected.length));
     book.title = `${creator}さんのデジタル絵本 第1巻`;
+    book.creator = creator;
     book.pages = pages;
     book.index = 0;
     openBook();
@@ -170,6 +174,29 @@
         { opacity: 1, transform: 'translateX(0) scale(1)' }
       ], { duration: 260, easing: 'ease-out' });
     }
+  }
+
+  function standaloneHtml() {
+    const pages = JSON.stringify(book.pages.map(page => ({ kind: page.kind, html: page.html }))).replace(/</g, '\\u003c');
+    const title = escapeHtml(book.title || 'デジタル絵本');
+    return `<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:system-ui,-apple-system,'Yu Gothic UI',Meiryo,sans-serif;background:#06101f;color:#eefcff}body{overflow:hidden}.book{height:100%;display:grid;grid-template-rows:auto 1fr auto;background:radial-gradient(circle at 50% 0,#102747,#040812 55%)}header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #27425a;background:#071322}header strong{font-size:15px}header span{font:12px ui-monospace,monospace;color:#9fcbd6}.stage{min-height:0;display:grid;grid-template-columns:58px minmax(0,1fr) 58px;align-items:center;gap:10px;padding:12px}.arrow{width:48px;height:48px;border-radius:50%;border:1px solid #47748a;background:#102a3d;color:white;font-size:32px}.arrow:disabled{opacity:.2}.page{width:min(980px,100%);height:min(80vh,760px);margin:auto;overflow:hidden;border-radius:18px;background:white;color:#17202a;box-shadow:0 25px 80px #0009}.inner{height:100%}.db-cover{height:100%;display:grid;grid-template-columns:1.15fr .85fr;background:linear-gradient(135deg,#f4fbff,#eef4ff 52%,#fff0fb)}.db-cover:not(.has-image){grid-template-columns:1fr;place-items:center;text-align:center}.db-cover-art{overflow:hidden}.db-cover-art img{width:100%;height:100%;object-fit:cover}.db-cover-copy{display:flex;flex-direction:column;justify-content:center;padding:48px}.db-cover-copy span,.db-story-meta span,.db-divider span{font-size:11px;letter-spacing:.18em;color:#527786;font-weight:800}.db-cover-copy h1,.db-divider h1{font-size:clamp(30px,5vw,58px);line-height:1.16;margin:16px 0;color:#17313b}.db-cover-copy p{color:#5b7780}.db-cover-mark{font-size:72px;color:#58b7ca}.db-story-page{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;padding:28px;gap:12px;background:#fff}.db-story-meta{display:flex;justify-content:space-between;color:#56717b}.db-story-art{min-height:0;display:grid;place-items:center;overflow:hidden;border-radius:12px;background:#eef3f4}.db-story-art img{width:100%;height:100%;object-fit:contain}.db-no-art{color:#7e969e}.db-story-text{min-height:86px;display:flex;align-items:center;justify-content:center;padding:12px 22px;border-top:2px solid #233b44}.db-story-text p{font-size:clamp(20px,2.5vw,31px);line-height:1.65;margin:0;text-align:center;white-space:pre-wrap;font-weight:650}.db-divider,.db-end{height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:38px;background:linear-gradient(145deg,#f7fcff,#f6f0ff)}.db-divider img{width:min(420px,70%);max-height:46%;object-fit:contain;border-radius:12px}.db-divider p,.db-end span{color:#6b858e}.db-end-star{font-size:52px;color:#58b7ca}.db-end h1{font-size:clamp(44px,7vw,76px);margin:8px}.db-end p{font-size:21px}.progress{height:5px;background:#153247}.progress i{display:block;height:100%;background:linear-gradient(90deg,#65f7ff,#a77bff)}footer{text-align:center;padding:8px;color:#86a7b4;font-size:11px}@media(max-width:720px){.stage{display:block;padding:6px}.page{height:calc(100vh - 104px)}.arrow{position:absolute;z-index:2;top:50%;transform:translateY(-50%);width:42px;height:42px}.prev{left:8px}.next{right:8px}.db-cover{grid-template-columns:1fr;grid-template-rows:55% 1fr}.db-cover-copy{padding:18px;text-align:center}.db-story-page{padding:10px}.db-story-text p{font-size:19px}footer{display:none}}
+</style></head><body><div class="book"><header><strong>${title}</strong><span id="count"></span></header><main class="stage"><button class="arrow prev" id="prev">‹</button><article class="page"><div class="inner" id="inner"></div></article><button class="arrow next" id="next">›</button></main><div><div class="progress"><i id="progress"></i></div><footer>左右キー・スワイプでページをめくれます</footer></div></div><script>
+const pages=${pages};let index=0,touchX=null;const inner=document.getElementById('inner'),count=document.getElementById('count'),progress=document.getElementById('progress'),prev=document.getElementById('prev'),next=document.getElementById('next');function render(){inner.innerHTML=pages[index]?.html||'';count.textContent=(index+1)+' / '+pages.length;progress.style.width=((index+1)/pages.length*100)+'%';prev.disabled=index===0;next.disabled=index===pages.length-1}function move(d){index=Math.max(0,Math.min(pages.length-1,index+d));render()}prev.onclick=()=>move(-1);next.onclick=()=>move(1);document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='PageDown')move(1);if(e.key==='ArrowLeft'||e.key==='PageUp')move(-1)});document.querySelector('.stage').addEventListener('touchstart',e=>touchX=e.changedTouches[0].clientX,{passive:true});document.querySelector('.stage').addEventListener('touchend',e=>{const d=e.changedTouches[0].clientX-touchX;if(Math.abs(d)>48)move(d>0?-1:1)},{passive:true});render();<\/script></body></html>`;
+  }
+
+  function exportStandaloneBook() {
+    if (!book.pages.length) return;
+    const blob = new Blob([standaloneHtml()], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${safeFile(book.creator || '作者')}_${safeFile(book.title || 'デジタル絵本')}.html`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    toast('デジタル絵本ファイルを保存しました');
   }
 
   async function injectBookButtons() {
